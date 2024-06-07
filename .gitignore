@@ -1,0 +1,8 @@
+venv
+__pycache__
+migrations
+*.sqlite3
+serializer.py 
+views.py
+urls.py
+swagger_schem*.py
