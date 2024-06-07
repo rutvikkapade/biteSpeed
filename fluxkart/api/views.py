@@ -38,3 +38,64 @@ class ContactViewSet(viewsets.ViewSet):
                     primary_contact = existing_contact_by_email
                 response_data = self.build_response(primary_contact)
                 return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                if existing_contact_by_email.id<existing_contact_by_phone.id:
+                    existing_contact_by_phone.linkPrecedence = 'secondary'
+                    if existing_contact_by_email.linkPrecedence == 'secondary':
+                        primary_contact = existing_contact_by_email.linkedId
+                    else:
+                        primary_contact = existing_contact_by_email
+                    existing_contact_by_phone.linkedId = primary_contact
+                    existing_contact_by_phone.save()
+                else:
+                    existing_contact_by_email.linkPrecedence = 'secondary'
+                    if existing_contact_by_phone.linkPrecedence == 'secondary':
+                        primary_contact = existing_contact_by_phone.linkedId
+                    else:
+                        primary_contact = existing_contact_by_phone
+                    existing_contact_by_email.linkedId = primary_contact
+                    existing_contact_by_email.save()
+                response_data = self.build_response(primary_contact)
+                return Response(response_data, status=status.HTTP_200_OK)
+        if not existing_contact_by_email and not existing_contact_by_phone:
+            # If neither email nor phone number exist, add a new primary contact
+            primary_contact = Contact.objects.create(
+                email=email,
+                phoneNumber=phoneNumber,
+                linkPrecedence='primary',
+            )
+        else:
+            # Otherwise, add a new secondary contact linked to the existing primary contact
+            primary_contact = existing_contact_by_email or existing_contact_by_phone
+            if primary_contact.linkPrecedence == 'secondary':
+                linkedId=primary_contact.linkedId
+            else:
+                linkedId=primary_contact
+            Contact.objects.create(
+                    email=email,
+                    phoneNumber=phoneNumber,
+                    linkedId = linkedId,
+                    linkPrecedence='secondary'
+                )
+
+
+        response_data = self.build_response(primary_contact)
+        return Response(response_data, status=status.HTTP_201_CREATED)
+
+    def build_response(self, primary_contact):
+        secondary_contacts = Contact.objects.filter(linkedId = primary_contact)
+        emails = [primary_contact.email]
+        phoneNumbers = [primary_contact.phoneNumber]
+        [emails.append(contact.email) for contact in secondary_contacts if contact.email not in emails]
+        [phoneNumbers.append(contact.phoneNumber) for contact in secondary_contacts if contact.phoneNumber not in phoneNumbers]
+        secondary_contact_ids = [contact.id for contact in secondary_contacts]
+
+        response_data = {
+            "contact": {
+                "primaryContactId": primary_contact.id,
+                "emails": emails,
+                "phoneNumbers": phoneNumbers,
+                "secondaryContactIds": secondary_contact_ids
+            }
+        }
+        return response_data
