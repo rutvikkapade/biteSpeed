@@ -49,6 +49,7 @@ class ContactViewSet(viewsets.ViewSet):
                         primary_contact = existing_contact_by_email
                     existing_contact_by_phone.linkedId = primary_contact
                     existing_contact_by_phone.save()
+                    Contact.objects.filter(linkedId=existing_contact_by_phone).update(linkedId=primary_contact)
                 else:
                     existing_contact_by_email.linkPrecedence = 'secondary'
                     if existing_contact_by_phone.linkPrecedence == 'secondary':
@@ -57,6 +58,7 @@ class ContactViewSet(viewsets.ViewSet):
                         primary_contact = existing_contact_by_phone
                     existing_contact_by_email.linkedId = primary_contact
                     existing_contact_by_email.save()
+                    Contact.objects.filter(linkedId=existing_contact_by_email).update(linkedId=primary_contact)
                 response_data = self.build_response(primary_contact)
                 return Response(response_data, status=status.HTTP_200_OK)
         if not existing_contact_by_email and not existing_contact_by_phone:
@@ -69,6 +71,7 @@ class ContactViewSet(viewsets.ViewSet):
         else:
             # Otherwise, add a new secondary contact linked to the existing primary contact
             primary_contact = existing_contact_by_email or existing_contact_by_phone
+            print(primary_contact)
             if primary_contact.linkPrecedence == 'secondary':
                 linkedId=primary_contact.linkedId
             else:
@@ -81,7 +84,7 @@ class ContactViewSet(viewsets.ViewSet):
                 )
 
 
-        response_data = self.build_response(primary_contact)
+        response_data = self.build_response(linkedId)
         return Response(response_data, status=status.HTTP_201_CREATED)
 
     def build_response(self, primary_contact):
