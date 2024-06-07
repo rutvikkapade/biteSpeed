@@ -68,6 +68,7 @@ class ContactViewSet(viewsets.ViewSet):
                 phoneNumber=phoneNumber,
                 linkPrecedence='primary',
             )
+            linkedId = primary_contact
         else:
             # Otherwise, add a new secondary contact linked to the existing primary contact
             primary_contact = existing_contact_by_email or existing_contact_by_phone
@@ -82,8 +83,6 @@ class ContactViewSet(viewsets.ViewSet):
                     linkedId = linkedId,
                     linkPrecedence='secondary'
                 )
-
-
         response_data = self.build_response(linkedId)
         return Response(response_data, status=status.HTTP_201_CREATED)
 
