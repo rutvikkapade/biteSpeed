@@ -7,7 +7,7 @@ create_contact_schema = swagger_auto_schema(
         type=openapi.TYPE_OBJECT,
         properties={
             'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email address of the contact'),
-            'phoneNumber': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number of the contact'),
+            'phoneNumber': openapi.Schema(type=openapi.TYPE_INTEGER, description='Phone number of the contact'),
         },
         required=['email', 'phoneNumber'],
     ),

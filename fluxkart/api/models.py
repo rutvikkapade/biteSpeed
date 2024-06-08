@@ -7,8 +7,8 @@ class Contact(models.Model):
     ]
 
     id = models.AutoField(primary_key=True)
-    phoneNumber = models.CharField(max_length=15, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
+    phoneNumber = models.IntegerField(null=True)
+    email = models.EmailField(null=True)
     linkedId = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='linked_contacts')
     linkPrecedence = models.CharField(max_length=9, choices=LINK_PRECEDENCE_CHOICES)
     createdAt = models.DateTimeField(auto_now_add=True)
