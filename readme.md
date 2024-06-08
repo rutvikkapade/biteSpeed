@@ -10,7 +10,7 @@ https://bitespeed-rlgu.onrender.com/api/swagger/
 
 ```
 [Post] 
-https://bitespeed-rlgu.onrender.com/api/Identify/
+https://bitespeed-rlgu.onrender.com/api/identify/
 ```
 
 ## Installation Guide for local
