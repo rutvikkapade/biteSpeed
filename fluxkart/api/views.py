@@ -29,8 +29,10 @@ class ContactViewSet(viewsets.ViewSet):
             if not phoneNumber and not email:
                 return Response("Both Cant be Null", status=status.HTTP_400_BAD_REQUEST)
             # Check if there is any contact with the same email or phoneNumber
-            if not isinstance(email, str, None) and not isinstance(phoneNumber, int, None):
-                return Response("Invalid data types", status=status.HTTP_400_BAD_REQUEST)
+            if email and not isinstance(email,str):
+                return Response("email should be string", status=status.HTTP_400_BAD_REQUEST)
+            if phoneNumber and not isinstance(phoneNumber,int):
+                return Response("phone number should be integer", status=status.HTTP_400_BAD_REQUEST)
             existing_contact_by_email = None
             existing_contact_by_phone = None
             if email:
