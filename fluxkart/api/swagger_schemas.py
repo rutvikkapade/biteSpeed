@@ -12,7 +12,7 @@ create_contact_schema = swagger_auto_schema(
         required=['email', 'phoneNumber'],
         example={
             'email': 'example@example.com',
-            'phoneNumber': '1234567890'
+            'phoneNumber': 1234567890
         }
     ),
     responses={
