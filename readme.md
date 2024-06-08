@@ -32,7 +32,7 @@ Install the necessary dependencies from the `requirements.txt` file.
 pip install -r requirements.txt
 ```
 
-### 3. Change Directory
+### 3. Change Directory using cd
 Navigate to the project directory.
 
 ```bash
