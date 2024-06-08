@@ -118,7 +118,7 @@ class ContactViewSet(viewsets.ViewSet):
          for contact in secondary_contacts if contact.email not in emails and contact.email]
         [phoneNumbers.append(contact.phoneNumber)
          for contact in secondary_contacts if contact.phoneNumber not in phoneNumbers and contact.phoneNumber]
-        secondary_contact_ids = [contact.id for contact in secondary_contacts]
+        secondary_contact_ids = [contact.id for contact in secondary_contacts if contact.id!=primary_contact.id]
 
         response_data = {
             "contact": {
