@@ -104,7 +104,7 @@ class ContactViewSet(viewsets.ViewSet):
             response_data = self.build_response(linkedId)
             return Response(response_data, status=status.HTTP_201_CREATED)
         except Exception as e:
-            Response('An Error Occured',
+            return Response('An Error Occured',
                      status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def build_response(self, primary_contact):
